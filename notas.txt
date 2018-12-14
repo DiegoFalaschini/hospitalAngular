@@ -1,0 +1,37 @@
+scss --watch daemonite-material/assets/scss:src/css
+
+nota escanear por mail nombre dni cancelar motivo, firma,aclaracion, lugar y fecha. consultas@hipotecarioseguros.com.ar
+
+
+Deploy
+
+1 sincronizar desde Trabajo
+
+2 desde Git Extension abrir el repositorio del G: (el personal, es decir el que no dice "Central" en el nombre de la carpeta ) y traerse los cambios
+
+3	Desde git extensions:
+	1 abrir dialogo de pull
+	2 elegir en "Pull desde" la opción url y ahi dejar la ruta del repositorio central (para el caso del totem seria G:\Aplicaciones Angular\Totem-Cliente-RepositorioCentral)
+	3 elegir en "Rama" -> "Ramas remotas" el nombre del Repositorio Central (para el caso del totem "master")
+	4 Presionar el botón Pull
+
+
+4 Entrar a Visual Code y ""ng build --env=prod""   ng build --target=production --environment=prod
+
+5 copiar la carpeta "Dist" (ejm G:\Aplicaciones Angular\Totem-Cliente\dist)
+
+6 Entrar por escritorio remoto al servidor 192.168.100.30 (keepass: Usuario "testing" del nuevo dominio)
+6 Entrar por escritorio remoto al servidor 192.168.100.35 (mientras las nuestras no esten en dominio)
+
+Pegar la carpeta "Dist" en la que se generó el build y pegarla en la carpeta \\192.168.0.30\Node.js\[nombre de app]. Ejm "\\192.168.0.30\Node.js\Totem"
+
+Va a mostrar un error de que no puede reemplazar la carpeta assets, Omitir este error
+
+
+-----------------------------------
+git add . (para guardar los cambios)
+git status
+git commit -m "Descripcion"
+git push
+git tag -a v1.0.0 -m "Versión esqueleto base" (para hacer hitos)
+git tag (para ver mis tag)
