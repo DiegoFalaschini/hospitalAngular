@@ -8,12 +8,14 @@ import { APP_ROUTES } from './app.routes';
 import { PagesModule } from './pages/pages.module';
 import { FormsModule } from '@angular/forms';
 
+// Servicios
+import { ServiceModule } from './services/service.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
-import { IncrementadorComponent } from './components/incrementador/incrementador.component';
-import { GraficoDonaComponent } from './components/grafico-dona/grafico-dona.component';
+
+
 
 
 @NgModule({
@@ -28,9 +30,13 @@ import { GraficoDonaComponent } from './components/grafico-dona/grafico-dona.com
     BrowserModule,
     APP_ROUTES,
     PagesModule,
-    FormsModule
+    FormsModule,
+    ServiceModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    
+  ],
+  bootstrap: [AppComponent],
+  
 })
 export class AppModule { }
