@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-declare function init_plugins ();
+declare function init_plugins (); // CLASE 64
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
