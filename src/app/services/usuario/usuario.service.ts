@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import * as _swal from 'sweetalert';
 import { SweetAlert } from 'sweetalert/typings/core';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 const swal: SweetAlert = _swal as any;
 
 @Injectable()
@@ -15,7 +16,7 @@ export class UsuarioService {
 	usuario: Usuario;
 	token: string;
 
-	constructor( public http: HttpClient, public router: Router	) { 
+	constructor( public http: HttpClient, public router: Router, public _subirArchivo: SubirArchivoService	) { 
 
 		this.cargarStorage();
 	}
@@ -31,7 +32,7 @@ export class UsuarioService {
 		localStorage.setItem('id', id );
 		localStorage.setItem('token', token );
 		localStorage.setItem('usuario', JSON.stringify(usuario) );	// En el localStorage no se pueden guardar objetos, por lo tanto debo guardarlo como string en formato JSON
-
+		
 		this.usuario = usuario;
 		this.token = token;
 
@@ -116,4 +117,55 @@ export class UsuarioService {
 				return resp.usuario;
 			})
 	}
+
+
+	actualizarUsuario ( usuario: Usuario ) {
+
+		let url = URL_SERVICIOS + '/usuario/' + usuario._id;
+		url += '?token=' + this.token;
+
+		console.log(url);
+
+		return this.http.put( url, usuario )
+			.map( (resp: any) => {
+
+				console.log(resp);
+				
+				
+				let usuarioDB: Usuario = resp.usuario;
+
+				this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+
+				swal('Usuario actualizado', usuario.nombre, 'success');
+
+				return true;
+			});
+		
+	}
+
+
+	cambiarImagen( archivo: File, id: string ) {
+
+		this._subirArchivo.subirArchivo( archivo, 'usuarios', id)
+			.then( (resp: any) => {
+
+				this.usuario.img = resp.usuario.img;
+
+				swal( 'Imagen Actualizada', this.usuario.nombre, 'success');
+
+				console.log(this.usuario.img);
+
+				this.guardarStorage( id, this.token, this.usuario );
+
+				console.log(resp.usuario.img);
+				console.log(this.usuario.img);
+				
+			})
+			.catch( resp => {
+
+				console.log(resp);
+				
+			});
+		
+	}	
 }

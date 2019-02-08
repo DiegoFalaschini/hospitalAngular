@@ -14,6 +14,7 @@ import { ServiceModule } from './services/service.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
+import { SubirArchivoService } from './services/subir-archivo/subir-archivo.service';
 
 
 
@@ -23,7 +24,7 @@ import { RegisterComponent } from './login/register.component';
     AppComponent,
      LoginComponent,
     RegisterComponent,
-    
+
 
   ],
   imports: [
@@ -35,7 +36,7 @@ import { RegisterComponent } from './login/register.component';
     ReactiveFormsModule
   ],
   providers: [
-    
+    SubirArchivoService
   ],
   bootstrap: [AppComponent],
   
