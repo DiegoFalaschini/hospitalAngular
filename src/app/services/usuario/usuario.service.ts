@@ -8,6 +8,7 @@ import * as _swal from 'sweetalert';
 import { SweetAlert } from 'sweetalert/typings/core';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { identifierModuleUrl } from '@angular/compiler';
 const swal: SweetAlert = _swal as any;
 
 @Injectable()
@@ -131,10 +132,14 @@ export class UsuarioService {
 
 				console.log(resp);
 				
-				
-				let usuarioDB: Usuario = resp.usuario;
+				// solo si el usuario actualizado es el mismo que esta logueado
+				if ( usuario._id === this.usuario._id ) {
 
-				this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+					let usuarioDB: Usuario = resp.usuario;
+
+					this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+				}
+
 
 				swal('Usuario actualizado', usuario.nombre, 'success');
 
@@ -167,5 +172,41 @@ export class UsuarioService {
 				
 			});
 		
+	}
+	
+	cargarUsuarios ( desde: number = 0) {
+
+		let url = URL_SERVICIOS + '/usuario?desde=' + desde;
+
+		return this.http.get(url);
+
 	}	
+
+	buscarUsuarios ( termino: string ) {
+
+		let url = URL_SERVICIOS + '/busqueda/coleccion/usuario/' + termino;
+
+		return this.http.get( url )
+			.map( (resp: any) => {
+				
+				console.log(resp);
+				
+				return resp.usuario;
+			});
+	}	
+
+
+	borrarUsuario ( id: string ) {
+
+		let url = URL_SERVICIOS + '/usuario/' + id;
+		url += '?token=' + this.token;
+
+		return this.http.delete( url )
+			.map( resp => {
+
+				swal('Usuario borrado', "el usuario ha sido eliminado correctamente", 'success');
+
+				return true;
+			});
+	}
 }

@@ -24,6 +24,7 @@ import { SubirArchivoService } from './services/subir-archivo/subir-archivo.serv
     AppComponent,
      LoginComponent,
     RegisterComponent,
+    
 
 
   ],

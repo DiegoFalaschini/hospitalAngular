@@ -18,7 +18,7 @@ export class BreadcrumbsComponent implements OnInit {
 				private meta: Meta) {
 		
 		this.getDataRoute().subscribe(data  => {
-			console.log(data);
+
 
 			this.titulo = data.titulo;
 			this.title.setTitle( data.titulo );	// Titulo de la pestaña  del navegador
