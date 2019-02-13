@@ -22,10 +22,16 @@
 
 
 						<!-- Así solo trabajamos con una imagen -->
-						<input (change)="seleccionImage( $event.target.files[0] )" type="file">					
+						<!-- <input (change)="seleccionImage( $event.target.files[0] )" class="btn btn-secondary mt-3" type="file">			 -->
+						<form>
+							<div class="form-group mt-3">
+								<label for="exampleFormControlFile1">Seleccione la imagen</label>
+								<input (change)="seleccionImage( $event.target.files[0] )" type="file" class="form-control-file">
+							</div>
+						</form>		
 				</div>
 
-				<div class="modal-footer">
+				<div class="modal-footer mt-3">
 					<button (click)="cerrarModal()" type="button" class="btn btn-secondary" >Cerrar</button>
 					<button (click)="subirImagen()" [disabled]="!imagenTemp" type="button" class="btn btn-primary">Save changes</button>
 				</div>
