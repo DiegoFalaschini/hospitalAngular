@@ -2,13 +2,20 @@ import { Injectable } from '@angular/core';
 import { Usuario } from '../../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import 'rxjs/add/operator/map';
+
 //import swal from 'sweetalert';
 import * as _swal from 'sweetalert';
 import { SweetAlert } from 'sweetalert/typings/core';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
-import { identifierModuleUrl } from '@angular/compiler';
+
+// RXJS
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
+
 const swal: SweetAlert = _swal as any;
 
 @Injectable()
@@ -16,6 +23,7 @@ export class UsuarioService {
 
 	usuario: Usuario;
 	token: string;
+	menu: any = [];
 
 	constructor( public http: HttpClient, public router: Router, public _subirArchivo: SubirArchivoService	) { 
 
@@ -28,14 +36,16 @@ export class UsuarioService {
 		return (this.token.length > 5 ) ? true : false;
 	}
 
-	guardarStorage( id: string, token: string, usuario: Usuario) {
+	guardarStorage( id: string, token: string, usuario: Usuario, menu: any) {
 
 		localStorage.setItem('id', id );
 		localStorage.setItem('token', token );
 		localStorage.setItem('usuario', JSON.stringify(usuario) );	// En el localStorage no se pueden guardar objetos, por lo tanto debo guardarlo como string en formato JSON
+		localStorage.setItem('menu', JSON.stringify(menu) );
 		
 		this.usuario = usuario;
 		this.token = token;
+		this.menu = menu;
 
 	}
 
@@ -45,10 +55,12 @@ export class UsuarioService {
 
 			this.token = localStorage.getItem('token');
 			this.usuario = JSON.parse( localStorage.getItem('usuario') );
+			this.menu = JSON.parse( localStorage.getItem('menu') );
 		} else {
 
 			this.token = '';
 			this.usuario = null;
+			this.menu = [];
 		}
 	}
 
@@ -57,9 +69,11 @@ export class UsuarioService {
 
 		this.token = '';
 		this.usuario = null;
+		this.menu = null;
 		
 		localStorage.removeItem('token');
 		localStorage.removeItem('usuario');
+		localStorage.removeItem('menu');
 
 		this.router.navigate(['/login']);		
 	}
@@ -73,7 +87,7 @@ export class UsuarioService {
 		return this.http.post( url, { token } )
 			.map( (resp: any) => {
 
-				this.guardarStorage( resp.id, resp.token, resp.usuario);
+				this.guardarStorage( resp.id, resp.token, resp.usuario, resp.menu );
 
 				return true;
 			});
@@ -99,9 +113,17 @@ export class UsuarioService {
 				// localStorage.setItem('token', resp.token );
 				// localStorage.setItem('usuario', JSON.stringify(resp.usuario) );	// En el localStorage no se pueden guardar objetos, por lo tanto debo guardarlo como string en formato JSON
 
-				this.guardarStorage( resp.id, resp.token, resp.usuario);
+				this.guardarStorage( resp.id, resp.token, resp.usuario, resp.menu);
 
 				return true;
+			})
+			.catch( err => {
+
+				console.log( err.error.mensaje );
+
+				swal( 'Error en el login', err.error.mensaje, 'error');
+				
+				return Observable.throw( err );
 			});
 	}
 
@@ -117,6 +139,12 @@ export class UsuarioService {
 
 				return resp.usuario;
 			})
+			.catch( err => {
+
+				swal( 'Error al crear el usuario', err.error.errors.message, 'error');
+				
+				return Observable.throw( err );
+			});
 	}
 
 
@@ -137,13 +165,19 @@ export class UsuarioService {
 
 					let usuarioDB: Usuario = resp.usuario;
 
-					this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+					this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
 				}
 
 
 				swal('Usuario actualizado', usuario.nombre, 'success');
 
 				return true;
+			})
+			.catch( err => {
+
+				swal( 'Error al actualizar el usuario', err.error.errors.message, 'error');
+				
+				return Observable.throw( err );
 			});
 		
 	}
@@ -160,7 +194,7 @@ export class UsuarioService {
 
 				console.log(this.usuario.img);
 
-				this.guardarStorage( id, this.token, this.usuario );
+				this.guardarStorage( id, this.token, this.usuario, this.menu );
 
 				console.log(resp.usuario.img);
 				console.log(this.usuario.img);
