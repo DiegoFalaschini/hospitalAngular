@@ -1,6 +1,7 @@
 // Guard
 export { LoginGuardGuard } from './../services/guards/login-guard.guard';
 export { AdminGuard } from './guards/admin.guard';
+export { VerificaTokenGuard } from './../services/guards/verifica-token.guard';
 
 // 
 export { SettingsService } from './settings/settings.service';

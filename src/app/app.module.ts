@@ -15,31 +15,35 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
 import { SubirArchivoService } from './services/subir-archivo/subir-archivo.service';
+import { PagesComponent } from './pages/pages.component';
+import { SharedModule } from './shared/shared.module';
 
 
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-     LoginComponent,
-    RegisterComponent,
-    
+	declarations: [
+		AppComponent,
+		LoginComponent,
+		RegisterComponent,
+		PagesComponent
+	],
 
+	imports: [
+		BrowserModule,
+		APP_ROUTES,
+		// PagesModule,
+		FormsModule,
+		ServiceModule,
+		ReactiveFormsModule,
+		SharedModule
+	],
 
-  ],
-  imports: [
-    BrowserModule,
-    APP_ROUTES,
-    PagesModule,
-    FormsModule,
-    ServiceModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    SubirArchivoService
-  ],
-  bootstrap: [AppComponent],
-  
+	providers: [
+		SubirArchivoService
+	],
+
+	bootstrap: [AppComponent],
+	
 })
 export class AppModule { }
